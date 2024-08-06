@@ -37,17 +37,13 @@
     /* 모듈 분석 옵션 */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@components/*": ["./src/components/*"],
-      "@config/*": ["./src/config/*"],
-      "@features/*": ["./src/features/*"],
-      "@layouts/*": ["./src/layouts/*"],
-      "@libs/*": ["./src/libs/*"],
-      "@services/*": ["./src/services/*"],
-      "@stores/*": ["./src/stores/*"],
-      "@types/*": ["./src/types/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@/*": ["src/*"],
+      "@assets/*": ["src/assets/*"],
+      "@features/*": ["src/presentation/features/*"],
+      "@layouts/*": ["src/presentation/layouts/*"],
+      "@stores/*": ["src/application/stores/*"],
+      "@types/*": ["src/types/*"],
+      "@styles/*": ["src/presentation/styles/*"],
     },
     "plugins": [
       {
