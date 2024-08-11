@@ -55,19 +55,16 @@ export default function App({
             </Head>
             <QueryProvider dehydratedState={dehydratedState}>
                 <AuthProvider session={session}>
-                    <EmotionProvider>
-                        <main className={myFont.className}>
-                            <ToastProvider>
-                                <ModalProvider>
-                                    <Component
-                                        {...rest}
-                                        key={router.asPath}
-                                    />
-                                </ModalProvider>
-                            </ToastProvider>
-                        </main>
-                        <Footer />
-                    </EmotionProvider>
+                    <main className={myFont.className}>
+                        <ToastProvider>
+                            <ModalProvider>
+                                <Component
+                                    {...rest}
+                                    key={router.asPath}
+                                />
+                            </ModalProvider>
+                        </ToastProvider>
+                    </main>
                 </AuthProvider>
             </QueryProvider>
         </>
