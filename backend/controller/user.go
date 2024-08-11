@@ -4,8 +4,6 @@ import (
 	"backend/model"
 	"encoding/json"
 	"net/http"
-	"strconv"
-	"strings"
 )
 
 type UserController struct {
@@ -22,9 +20,9 @@ func (c *UserController) GetUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *UserController) GetUser(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/users/"))
-	if err != nil {
-		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+	id, ok := r.Context().Value("user_id").(int)
+	if !ok {
+		http.Error(w, "User ID not found in context", http.StatusInternalServerError)
 		return
 	}
 
@@ -47,7 +45,7 @@ func (c *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := c.Model.InsertUser(user.Name, user.Age)
+	id, err := c.Model.InsertUser(user.Name, user.Age, user.ProfileImage)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -58,9 +56,9 @@ func (c *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *UserController) UpdateUserName(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/users/"))
-	if err != nil {
-		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+	id, ok := r.Context().Value("user_id").(int)
+	if !ok {
+		http.Error(w, "User ID not found in context", http.StatusInternalServerError)
 		return
 	}
 
@@ -72,7 +70,53 @@ func (c *UserController) UpdateUserName(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	if err := c.Model.UpdateUserName(id, data.Name); err != nil {
+	if _, err := c.Model.UpdateUserName(id, data.Name); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (c *UserController) UpdateAge(w http.ResponseWriter, r *http.Request) {
+	id, ok := r.Context().Value("user_id").(int)
+	if !ok {
+		http.Error(w, "User ID not found in context", http.StatusInternalServerError)
+		return
+	}
+
+	var data struct {
+		Age int `json:"age"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if _, err := c.Model.UpdateAge(id, data.Age); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (c *UserController) UpdateProfileImage(w http.ResponseWriter, r *http.Request) {
+	id, ok := r.Context().Value("user_id").(int)
+	if !ok {
+		http.Error(w, "User ID not found in context", http.StatusInternalServerError)
+		return
+	}
+
+	var data struct {
+		ProfileImage string `json:"profile_image"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if _, err := c.Model.UpdateProfileImage(id, data.ProfileImage); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -81,13 +125,13 @@ func (c *UserController) UpdateUserName(w http.ResponseWriter, r *http.Request) 
 }
 
 func (c *UserController) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/users/"))
-	if err != nil {
-		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+	id, ok := r.Context().Value("user_id").(int)
+	if !ok {
+		http.Error(w, "User ID not found in context", http.StatusInternalServerError)
 		return
 	}
 
-	if err := c.Model.DeleteUser(id); err != nil {
+	if _, err := c.Model.DeleteUser(id); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
