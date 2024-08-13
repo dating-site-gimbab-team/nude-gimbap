@@ -22,7 +22,6 @@ func main() {
 
 	// Add the user router
 	mainMux.Handle("/api/users", router.NewUserLoggedRouter(db))
-	mainMux.Handle("/api/users/", router.NewUserLoggedRouter(db))
 
 	log.Println("Server is listening on port 8080...")
 	log.Fatal(http.ListenAndServe(":8080", mainMux))

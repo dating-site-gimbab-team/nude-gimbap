@@ -14,7 +14,7 @@ func NewUserRouter(db *sql.DB) *http.ServeMux {
 	userController := &controller.UserController{Model: userModel}
 
 	router := http.NewServeMux()
-	router.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/api/users", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			userController.GetUsers(w, r)
 		} else if r.Method == http.MethodPost {
@@ -24,7 +24,7 @@ func NewUserRouter(db *sql.DB) *http.ServeMux {
 		}
 	})
 
-	router.HandleFunc("/users/profile/", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/api/users/profile/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPatch {
 			userController.UpdateUserName(w, r)
 		} else {
@@ -46,7 +46,7 @@ func NewUserRouter(db *sql.DB) *http.ServeMux {
 		}
 	})
 
-	router.HandleFunc("/users/name/", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/api/users/name/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPatch {
 			userController.UpdateUserName(w, r)
 		} else {
@@ -68,7 +68,7 @@ func NewUserRouter(db *sql.DB) *http.ServeMux {
 		}
 	})
 
-	router.HandleFunc("/users/", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/api/users/", func(w http.ResponseWriter, r *http.Request) {
 		pathParts := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
 		if len(pathParts) == 2 && pathParts[0] == "users" {
 			userID := pathParts[1]

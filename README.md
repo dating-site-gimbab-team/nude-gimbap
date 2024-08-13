@@ -1,5 +1,11 @@
 # nude-gimbap
 
+## backend
+
+```bash
+
+```
+
 ## frontend
 
 ### 1. application
