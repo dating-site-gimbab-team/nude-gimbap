@@ -1,5 +1,4 @@
-import { css } from '@emotion/react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { InputContainerProps } from './types';
 
 export const Root = styled.div({

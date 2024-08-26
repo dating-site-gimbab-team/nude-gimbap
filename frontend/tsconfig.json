@@ -16,7 +16,6 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": false,
     "jsx": "preserve",
-    "jsxImportSource": "@emotion/react",
     "noEmit": true,
     "isolatedModules": true,
     "incremental": true,

@@ -1,11 +1,12 @@
 import 'react-responsive-modal/styles.css';
 import localFont from 'next/font/local';
+import Head from 'next/head';
 import type { AppProps } from 'next/app';
 import { AuthProvider } from '@providers/auth';
 import { ModalProvider } from '@providers/modal';
 import { QueryProvider } from '@providers/query';
-import Head from 'next/head';
 import { ToastProvider } from '@providers/toast';
+import { StyledProvider } from '@providers/styled';
 // import { Footer } from '@presentation/components/organisms/footer';
 
 const myFont = localFont({
@@ -55,17 +56,20 @@ export default function App({
             </Head>
             <QueryProvider dehydratedState={dehydratedState}>
                 <AuthProvider session={session}>
-                    <main className={myFont.className}>
-                        <ToastProvider>
-                            <ModalProvider>
-                                <Component
-                                    {...rest}
-                                    key={router.asPath}
-                                />
-                            </ModalProvider>
-                        </ToastProvider>
-                    </main>
-                </AuthProvider>
+                    <StyledProvider>
+                        <main className={myFont.className}>
+                            <ToastProvider>
+                                <ModalProvider>
+                                    <Component
+                                        {...rest}
+                                        key={router.asPath}
+                                    />
+                                </ModalProvider>
+                            </ToastProvider>
+                        </main>
+                        {/* <Footer /> */}
+                    </StyledProvider>
+                </AuthProvider> 
             </QueryProvider>
         </>
     );

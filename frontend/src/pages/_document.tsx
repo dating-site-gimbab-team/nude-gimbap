@@ -5,14 +5,7 @@ export default function Document(): JSX.Element {
         <Html lang="ko">
             <Head>
                 <meta charSet="utf-8" />
-                <meta name="version" content="20240617-1" />
-                <link
-                    rel="icon"
-                    type="image/png"
-                    sizes="64x64"
-                    href="/assets/images/logo_64.png"
-                    key="icon64"
-                />
+                <meta name="version" content="20240826-1" />
                 <link
                     rel="icon"
                     type="image/png"
