@@ -1,0 +1,129 @@
+basePath: /api
+definitions:
+  model.CreateUserDTO:
+    properties:
+      age:
+        type: integer
+      gender:
+        type: integer
+      name:
+        type: string
+      phone_number:
+        type: string
+      profile_image:
+        type: string
+      provider:
+        type: string
+    type: object
+  model.ItemDTO:
+    properties:
+      age:
+        type: integer
+      gender:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      phone_number:
+        type: string
+      profile_image:
+        type: string
+      provider:
+        type: string
+    type: object
+  utils.Metadata:
+    properties:
+      timestamp:
+        type: integer
+      timezone:
+        type: string
+    type: object
+  utils.SimpleResponse-any:
+    properties:
+      _metadata:
+        $ref: '#/definitions/utils.Metadata'
+      data: {}
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+  utils.SimpleResponse-array_model_ItemDTO:
+    properties:
+      _metadata:
+        $ref: '#/definitions/utils.Metadata'
+      data:
+        items:
+          $ref: '#/definitions/model.ItemDTO'
+        type: array
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+  utils.SimpleResponse-string:
+    properties:
+      _metadata:
+        $ref: '#/definitions/utils.Metadata'
+      data:
+        type: string
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: 개인 프로젝트 API
+  version: 1.0.0
+paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.SimpleResponse-array_model_ItemDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.SimpleResponse-string'
+      summary: 전체 사용자 조회
+      tags:
+      - 사용자
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 사용자 로그인 정보
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateUserDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/utils.SimpleResponse-any'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.SimpleResponse-string'
+      summary: 사용자 생성
+      tags:
+      - 사용자
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"backend/model"
+	"backend/utils"
 	"encoding/json"
 	"net/http"
 )
@@ -10,13 +11,24 @@ type UserController struct {
 	Model *model.UserModel
 }
 
+// @Summary 전체 사용자 조회
+// @Description
+// @name GetUsers
+// @Accept json
+// @Produce json
+// @Tags 사용자
+// @Router /users [get]
+// @Success 200 {object} utils.SimpleResponse[[]model.ItemDTO]
+// @Failure 400 {object} utils.SimpleResponse[string]
 func (c *UserController) GetUsers(w http.ResponseWriter, r *http.Request) {
 	users, err := c.Model.GetAllUsers()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(users)
+	dto := utils.ResponseDTO[[]model.ItemDTO](&users, http.StatusOK, nil)
+	w.WriteHeader(dto.StatusCode)
+	json.NewEncoder(w).Encode(dto)
 }
 
 func (c *UserController) GetUser(w http.ResponseWriter, r *http.Request) {
@@ -35,24 +47,37 @@ func (c *UserController) GetUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
 	}
-	json.NewEncoder(w).Encode(user)
+	dto := utils.ResponseDTO[model.User](user, http.StatusOK, nil)
+	w.WriteHeader(dto.StatusCode)
+	json.NewEncoder(w).Encode(dto)
 }
 
+// @Summary 사용자 생성
+// @Description
+// @name CreateUser
+// @Accept json
+// @Produce json
+// @Tags 사용자
+// @Router /users [post]
+// @Param user body model.CreateUserDTO true "사용자 로그인 정보"
+// @Success 201 {object} utils.SimpleResponse[any]
+// @Failure 400 {object} utils.SimpleResponse[string]
 func (c *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
-	var user model.User
+	var user model.CreateUserDTO
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	id, err := c.Model.InsertUser(user.Name, user.Age, user.ProfileImage)
+	_, err := c.Model.InsertUser(user)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	user.ID = int(id)
-	json.NewEncoder(w).Encode(user)
+	dto := utils.ResponseDTO[any](nil, http.StatusCreated, nil)
+	w.WriteHeader(dto.StatusCode)
+	json.NewEncoder(w).Encode(dto)
 }
 
 func (c *UserController) UpdateUserName(w http.ResponseWriter, r *http.Request) {
