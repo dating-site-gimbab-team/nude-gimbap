@@ -7,7 +7,6 @@ import { ModalProvider } from '@providers/modal';
 import { QueryProvider } from '@providers/query';
 import { ToastProvider } from '@providers/toast';
 import { StyledProvider } from '@providers/styled';
-// import { Footer } from '@presentation/components/organisms/footer';
 
 const myFont = localFont({
     src: [
@@ -67,7 +66,6 @@ export default function App({
                                 </ModalProvider>
                             </ToastProvider>
                         </main>
-                        {/* <Footer /> */}
                     </StyledProvider>
                 </AuthProvider> 
             </QueryProvider>

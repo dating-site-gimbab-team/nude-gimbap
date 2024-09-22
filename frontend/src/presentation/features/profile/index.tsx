@@ -2,16 +2,16 @@ import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Loader } from '@presentation/components/atoms/loader';
 import { Header } from '@presentation/components/organisms/header';
-import { FeedOrg } from '@presentation/components/organisms/feed';
+import { ProfileOrg } from '@presentation/components/organisms/profile';
 import { useNextRouter } from '@application/hooks/common/router';
 import BottomNavigation from '@presentation/components/organisms/navigation';
 
-export function Feed(): JSX.Element {
+export function Profile(): JSX.Element {
     const router = useNextRouter();
     const { status, data: session } = useSession();
 
     useEffect(() => {
-        console.log(session?.user);
+        console.log(session);
         if (session === null) {
             router.push('/login');
         }
@@ -24,7 +24,7 @@ export function Feed(): JSX.Element {
     return (
         <>
             <Header />
-            <FeedOrg />
+            <ProfileOrg />
             <BottomNavigation/>
         </>
     );

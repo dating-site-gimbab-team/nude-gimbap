@@ -1,6 +1,6 @@
 import { Container } from "./styles";
 
-export function FeedOrg(): JSX.Element {
+export function ProfileOrg(): JSX.Element {
     return (
         <Container/>
     )
