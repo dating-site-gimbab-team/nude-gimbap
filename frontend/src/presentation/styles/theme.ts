@@ -97,6 +97,7 @@ export const colors = {
     9: '#57090D',
     10: '#240103',
   },
+  github: '#1F2329',
   support: {
     sproutGreen: {
       1: '#E2F3B6',
