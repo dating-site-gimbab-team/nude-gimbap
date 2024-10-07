@@ -26,8 +26,8 @@ func NewDB() (*sql.DB, error) {
 	}
 
 	dbPW := os.Getenv("DB_PW")
-	if dbPort == "" {
-		dbPort = "nude1234!!"
+	if dbPW == "" {
+		dbPW = "nude1234!!"
 	}
 
 	db_url := fmt.Sprintf("root:%s@tcp(%s:%s)/nude", dbPW, dbHost, dbPort)
