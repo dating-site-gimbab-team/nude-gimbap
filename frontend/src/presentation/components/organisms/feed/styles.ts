@@ -13,7 +13,7 @@ export const Container = styled.div({
 
 export const Card = styled.div`
   width: 300px;
-  height: 312px;
+  height: 300px;
   padding: 20px;
   border-radius: 10px;
   background-color: white;
@@ -21,10 +21,18 @@ export const Card = styled.div`
   text-align: center;
   position: absolute;
   transition: transform 0.3s, opacity 0.5s;
+  cursor: grab;
 
   &.fade-out {
     opacity: 0;
-    transform: translateY(-20px);
+  }
+
+  &.left.fade-out {
+    transform: translateX(-100%) rotate(-10deg);
+  }
+
+  &.right.fade-out {
+    transform: translateX(100%) rotate(10deg);
   }
 
   img {
@@ -33,14 +41,17 @@ export const Card = styled.div`
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 20px;
+    user-select: none;
   }
 
   h3 {
     margin-bottom: 10px;
+    user-select: none;
   }
 
   p {
     margin: 5px 0;
+    user-select: none;
   }
 `;
 
@@ -52,8 +63,15 @@ export const Button = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+  background-color: ${colors.support.royalBlue[3]};
 
   &:hover {
-    background-color: ${colors.primary[3]};
+    background-color: ${colors.support.royalBlue[2]};
+  }
+  &.dislike {
+    background-color: ${colors.secondary[5]};
+    &:hover {
+    background-color: ${colors.secondary[3]};
+  }
   }
 `;
