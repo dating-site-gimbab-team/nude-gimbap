@@ -19,6 +19,30 @@ import (
 
 // @host localhost:8080
 // @BasePath /api
+
+func enableCORS(allowedOrigins []string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			origin := r.Header.Get("Origin")
+			for _, allowedOrigin := range allowedOrigins {
+				if origin == allowedOrigin {
+					w.Header().Set("Access-Control-Allow-Origin", origin)
+					break
+				}
+			}
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+			w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type")
+
+			if r.Method == "OPTIONS" {
+				w.WriteHeader(http.StatusOK)
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
 func main() {
 	db, err := config.NewDB()
 	if err != nil {
@@ -28,9 +52,15 @@ func main() {
 
 	mainMux := http.NewServeMux()
 
-	mainMux.Handle("/", router.NewMainLoggedRouter(db))
+	allowedOrigins := []string{
+		"http://localhost:3000",
+		"http://localhost:8080",
+	}
 
-	mainMux.Handle("/api/users", router.NewUserLoggedRouter(db))
+	corsMiddleware := enableCORS(allowedOrigins)
+
+	mainMux.Handle("/", corsMiddleware(router.NewMainLoggedRouter(db)))
+	mainMux.Handle("/api/users", corsMiddleware(router.NewUserLoggedRouter(db)))
 
 	mainMux.Handle("/docs/", httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:8080/docs/doc.json"),

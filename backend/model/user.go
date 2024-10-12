@@ -40,7 +40,7 @@ type UserModel struct {
 }
 
 func (m *UserModel) GetAllUsers() ([]ItemDTO, error) {
-	rows, err := m.DB.Query("SELECT id, name, age, profile_image FROM Users")
+	rows, err := m.DB.Query("SELECT id, name, age, gender, profile_image, provider FROM Users")
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func (m *UserModel) GetAllUsers() ([]ItemDTO, error) {
 	var users []ItemDTO = []ItemDTO{}
 	for rows.Next() {
 		var user ItemDTO
-		err := rows.Scan(&user.ID, &user.Name, &user.Age, &user.ProfileImage)
+		err := rows.Scan(&user.ID, &user.Name, &user.Age, &user.Gender, &user.ProfileImage, &user.Provider)
 		if err != nil {
 			return nil, err
 		}
@@ -76,7 +76,7 @@ func (m *UserModel) InsertUser(user CreateUserDTO) (int64, error) {
 	}
 	defer tx.Rollback()
 
-	res, err := tx.Exec("INSERT INTO Users (name, age, gender, phone_number, provider) VALUES (?, ?, ?, ?, ?)", user.Name, user.Age, user.Gender, user.PhoneNumber, user.Provider)
+	res, err := tx.Exec("INSERT INTO Users (name, age, gender, phone_number, profile_image, provider) VALUES (?, ?, ?, ?, ?, ?)", user.Name, user.Age, user.Gender, user.PhoneNumber, user.ProfileImage, user.Provider)
 	if err != nil {
 		return 0, err
 	}

@@ -1,0 +1,14 @@
+POST /api/users를 보내서 남자 50명, 여자 50명을 생성하는 코드를 작성해.
+
+```
+type CreateUserDTO struct {
+	Name         string `json:"name"`
+	Age          int    `json:"age"`
+	Gender       int    `json:"gender"`
+	PhoneNumber  string `json:"phone_number"`
+	ProfileImage string `json:"profile_image"`
+	Provider     string `json:"provider"`
+}
+```
+이 구조에 맞게 해줘.
+Provider는 fake로 지정해줘.
