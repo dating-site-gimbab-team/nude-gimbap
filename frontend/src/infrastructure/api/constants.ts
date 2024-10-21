@@ -1,9 +1,13 @@
 export enum ApiEndpoints {
   // Auth
-  LOGIN = '/v1/auth/login',
-  LOGOUT = '/v1/auth/logout',
-  GET_AUTH_INFO = '/v1/auth/who-am-i',
+  LOGIN = '/auth/login',
+  LOGOUT = '/auth/logout',
+  GET_AUTH_INFO = '/auth/who-am-i',
 
   // User
-  GET_USERS = '/v1/user',
+  GET_USERS = '/users',
+
+  // Feedback
+  LIKE_FEED = '/feeds/like',
+  DISLIKE_FEED = '/feeds/dislike',
 }

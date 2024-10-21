@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS Boards;
 DROP TABLE IF EXISTS Likes;
 DROP TABLE IF EXISTS Users;
 
@@ -13,22 +12,13 @@ CREATE TABLE Users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Boards (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(255) NOT NULL,
-    content TEXT NULL,
-    user_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(id)
-);
-
 CREATE TABLE Likes (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    board_id INT NOT NULL,
-    user_id INT NOT NULL,
+    user_id INT NOT NULL, -- 평가를 하는 사용자
+    liked_user_id INT NOT NULL, -- 평가를 받는 사용자
     like_status TINYINT NOT NULL, -- 1 for like, 0 for unlike
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (board_id) REFERENCES Boards(id),
     FOREIGN KEY (user_id) REFERENCES Users(id),
-    UNIQUE (board_id, user_id) -- Ensuring one like/unlike per user per board
+    FOREIGN KEY (liked_user_id) REFERENCES Users(id),
+    UNIQUE (user_id, liked_user_id) -- Ensuring one like/unlike per user per user
 );

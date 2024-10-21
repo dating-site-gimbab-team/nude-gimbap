@@ -28,16 +28,23 @@ func (c *UserController) GetUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	dto := utils.ResponseDTO[[]model.ItemDTO](&users, http.StatusOK, nil)
 	w.WriteHeader(dto.StatusCode)
-	json.NewEncoder(w).Encode(dto)
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	encoder.SetIndent("", "  ")
+	encoder.Encode(dto)
 }
 
-func (c *UserController) GetUser(w http.ResponseWriter, r *http.Request) {
-	id, ok := r.Context().Value("user_id").(int)
-	if !ok {
-		http.Error(w, "User ID not found in context", http.StatusInternalServerError)
-		return
-	}
-
+// @Summary 사용자 조회
+// @Description
+// @name GetUser
+// @Accept json
+// @Produce json
+// @Tags 사용자
+// @Router /users/{user_id} [get]
+// @Param user_id path int true "사용자 ID"
+// @Success 200 {object} utils.SimpleResponse[model.User]
+// @Failure 400 {object} utils.SimpleResponse[string]
+func (c *UserController) GetUser(w http.ResponseWriter, r *http.Request, id int) {
 	user, err := c.Model.GetUserByID(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -49,7 +56,10 @@ func (c *UserController) GetUser(w http.ResponseWriter, r *http.Request) {
 	}
 	dto := utils.ResponseDTO[model.User](user, http.StatusOK, nil)
 	w.WriteHeader(dto.StatusCode)
-	json.NewEncoder(w).Encode(dto)
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	encoder.SetIndent("", "  ")
+	encoder.Encode(dto)
 }
 
 // @Summary 사용자 생성
@@ -77,7 +87,10 @@ func (c *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	dto := utils.ResponseDTO[any](nil, http.StatusCreated, nil)
 	w.WriteHeader(dto.StatusCode)
-	json.NewEncoder(w).Encode(dto)
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	encoder.SetIndent("", "  ")
+	encoder.Encode(dto)
 }
 
 func (c *UserController) UpdateUserName(w http.ResponseWriter, r *http.Request) {
@@ -100,7 +113,12 @@ func (c *UserController) UpdateUserName(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	dto := utils.ResponseDTO[any](nil, http.StatusOK, nil)
+	w.WriteHeader(dto.StatusCode)
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	encoder.SetIndent("", "  ")
+	encoder.Encode(dto)
 }
 
 func (c *UserController) UpdateAge(w http.ResponseWriter, r *http.Request) {
@@ -123,7 +141,12 @@ func (c *UserController) UpdateAge(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	dto := utils.ResponseDTO[any](nil, http.StatusOK, nil)
+	w.WriteHeader(dto.StatusCode)
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	encoder.SetIndent("", "  ")
+	encoder.Encode(dto)
 }
 
 func (c *UserController) UpdateProfileImage(w http.ResponseWriter, r *http.Request) {
@@ -146,7 +169,12 @@ func (c *UserController) UpdateProfileImage(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	dto := utils.ResponseDTO[any](nil, http.StatusOK, nil)
+	w.WriteHeader(dto.StatusCode)
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	encoder.SetIndent("", "  ")
+	encoder.Encode(dto)
 }
 
 func (c *UserController) DeleteUser(w http.ResponseWriter, r *http.Request) {
@@ -161,5 +189,10 @@ func (c *UserController) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	dto := utils.ResponseDTO[any](nil, http.StatusOK, nil)
+	w.WriteHeader(dto.StatusCode)
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	encoder.SetIndent("", "  ")
+	encoder.Encode(dto)
 }

@@ -11,7 +11,6 @@ export function Feed(): JSX.Element {
     const { status, data: session } = useSession();
 
     useEffect(() => {
-        console.log(session?.user);
         if (session === null) {
             router.push('/login');
         }

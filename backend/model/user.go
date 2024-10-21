@@ -40,7 +40,7 @@ type UserModel struct {
 }
 
 func (m *UserModel) GetAllUsers() ([]ItemDTO, error) {
-	rows, err := m.DB.Query("SELECT id, name, age, gender, profile_image, provider FROM Users")
+	rows, err := m.DB.Query("SELECT id, name, age, gender, profile_image, provider FROM Users WHERE id != 1")
 	if err != nil {
 		return nil, err
 	}

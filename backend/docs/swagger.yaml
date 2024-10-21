@@ -1,5 +1,12 @@
 basePath: /api
 definitions:
+  model.CreateFeedbackDTO:
+    properties:
+      targetUserId:
+        type: integer
+      userId:
+        type: integer
+    type: object
   model.CreateUserDTO:
     properties:
       age:
@@ -19,6 +26,25 @@ definitions:
     properties:
       age:
         type: integer
+      gender:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      phone_number:
+        type: string
+      profile_image:
+        type: string
+      provider:
+        type: string
+    type: object
+  model.User:
+    properties:
+      age:
+        type: integer
+      created_at:
+        type: string
       gender:
         type: integer
       id:
@@ -62,6 +88,17 @@ definitions:
       statusCode:
         type: integer
     type: object
+  utils.SimpleResponse-model_User:
+    properties:
+      _metadata:
+        $ref: '#/definitions/utils.Metadata'
+      data:
+        $ref: '#/definitions/model.User'
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
   utils.SimpleResponse-string:
     properties:
       _metadata:
@@ -79,6 +116,56 @@ info:
   title: 개인 프로젝트 API
   version: 1.0.0
 paths:
+  /feeds/dislike:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 피드 싫어요 정보
+        in: body
+        name: feedback
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateFeedbackDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/utils.SimpleResponse-any'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.SimpleResponse-string'
+      summary: 피드 싫어요
+      tags:
+      - 피드
+  /feeds/like:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 피드 좋아요 정보
+        in: body
+        name: feedback
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateFeedbackDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/utils.SimpleResponse-any'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.SimpleResponse-string'
+      summary: 피드 좋아요
+      tags:
+      - 피드
   /users:
     get:
       consumes:
@@ -119,6 +206,30 @@ paths:
           schema:
             $ref: '#/definitions/utils.SimpleResponse-string'
       summary: 사용자 생성
+      tags:
+      - 사용자
+  /users/{user_id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 사용자 ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.SimpleResponse-model_User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.SimpleResponse-string'
+      summary: 사용자 조회
       tags:
       - 사용자
 securityDefinitions:

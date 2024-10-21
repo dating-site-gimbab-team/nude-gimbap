@@ -61,6 +61,8 @@ func main() {
 
 	mainMux.Handle("/", corsMiddleware(router.NewMainLoggedRouter(db)))
 	mainMux.Handle("/api/users", corsMiddleware(router.NewUserLoggedRouter(db)))
+	mainMux.Handle("/api/users/", corsMiddleware(router.NewUserLoggedRouter(db)))
+	mainMux.Handle("/api/feeds/", corsMiddleware(router.NewFeedbackLoggedRouter(db)))
 
 	mainMux.Handle("/docs/", httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:8080/docs/doc.json"),

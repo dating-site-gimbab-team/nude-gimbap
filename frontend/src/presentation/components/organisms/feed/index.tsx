@@ -1,25 +1,35 @@
 // index.tsx
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Container, Card, Button } from './styles';
-import { dummyData } from "./data";
+import { useGetUsers } from '@/application/hooks/api/user';
+import { useDislikeFeed, useLikeFeed } from '@/application/hooks/api/feedback';
 
 export function FeedOrg(): JSX.Element {
+  const { data } = useGetUsers();
+  const { mutate: likeFeed } = useLikeFeed();
+  const { mutate: dislikeFeed } = useDislikeFeed();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fadeOut, setFadeOut] = useState(false);
   const [direction, setDirection] = useState<'left' | 'right'>('left');
   const [startX, setStartX] = useState(0); 
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleNext = (direction: 'left' | 'right') => {
+  const handleNext = useCallback((direction: 'left' | 'right') => {
+    if (direction === 'left') {
+      likeFeed({ targetUserId: data?.data?.[currentIndex]?.id ?? 0 });
+    } else {
+      dislikeFeed({ targetUserId: data?.data?.[currentIndex]?.id ?? 0 });
+    }
     setDirection(direction);
     setFadeOut(true);
     setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % dummyData.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % (data?.data?.length ?? 0));
       setFadeOut(false);
     }, 500); 
-  };
-// Handle touch and mouse start
-const handleStart = (clientX: number) => {
+  }, [data?.data, currentIndex]);
+  
+  // Handle touch and mouse start
+  const handleStart = (clientX: number) => {
     setStartX(clientX);
     setIsDragging(true);
   };
@@ -71,7 +81,7 @@ const handleStart = (clientX: number) => {
 
   return (
     <Container>
-      {dummyData[currentIndex] && (
+      {data && data?.data && (
         <Card 
         className={`${fadeOut ? 'fade-out' : ''} ${direction}`}
         onTouchStart={handleTouchStart}
@@ -80,10 +90,10 @@ const handleStart = (clientX: number) => {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
         >
-          <img src={dummyData[currentIndex].profile_image} alt={dummyData[currentIndex].name} />
-          <h3>{dummyData[currentIndex].name}</h3>
-          <p>Age: {dummyData[currentIndex].age}</p>
-          <p>Gender: {dummyData[currentIndex].gender}</p>
+          <img src={data?.data[currentIndex]?.profile_image} alt={data?.data[currentIndex]?.name} />
+          <h3>{data?.data[currentIndex]?.name}</h3>
+          <p>나이: {data?.data[currentIndex]?.age}</p>
+          <p>성별: {data?.data[currentIndex]?.gender === 1 ? '남' : '여'}</p>
           <div>
           <Button onClick={() => handleNext('left')}>좋아요</Button>
           <Button className="dislike" onClick={() => handleNext('right')}>싫어요</Button>

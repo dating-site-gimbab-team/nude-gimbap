@@ -6,6 +6,7 @@ import (
 	"backend/model"
 	"database/sql"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -70,16 +71,22 @@ func NewUserRouter(db *sql.DB) *http.ServeMux {
 
 	router.HandleFunc("/api/users/", func(w http.ResponseWriter, r *http.Request) {
 		pathParts := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
-		if len(pathParts) == 2 && pathParts[0] == "users" {
-			userID := pathParts[1]
+		if len(pathParts) == 3 && pathParts[0] == "api" && pathParts[1] == "users" {
+			userID := pathParts[2]
 			r = setRequestContext(r, "user_id", userID)
 
-			if r.Method == http.MethodGet {
-				userController.GetUser(w, r)
-			} else if r.Method == http.MethodDelete { // Corrected method for delete
+			switch r.Method {
+			case http.MethodGet:
+				userID, err := strconv.Atoi(userID)
+				if err != nil {
+					http.Error(w, "잘못된 사용자 ID", http.StatusBadRequest)
+					return
+				}
+				userController.GetUser(w, r, userID)
+			case http.MethodDelete:
 				userController.DeleteUser(w, r)
-			} else {
-				http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			default:
+				http.Error(w, "허용되지 않는 메소드", http.StatusMethodNotAllowed)
 			}
 		} else {
 			http.NotFound(w, r)
